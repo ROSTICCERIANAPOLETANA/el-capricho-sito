@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>El Capricho | Rosticceria Napoletana a Las Galletas</title>
+  <meta name="description" content="El Capricho Rosticceria Napoletana a Las Galletas, Tenerife. Pizza, pasta, fritti, piatti napoletani e buffet preparati ogni giorno." />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="menu-data.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#home"><img src="assets/logo.png" alt="El Capricho logo"><span>EL CAPRICHO</span></a>
+  <nav>
+    <a href="#menu">Menù</a><a href="#buffet">Buffet</a><a href="#gallery">Foto</a><a href="#contatti">Contatti</a>
+  </nav>
+  <div class="langs"><button data-lang="it">IT</button><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content reveal">
+      <img class="hero-logo" src="assets/logo.png" alt="El Capricho Rosticceria Napoletana">
+      <p class="eyebrow">Pizza • Pasta • Fritti</p>
+      <h1 data-i18n="heroTitle">Il vero sapore di Napoli a Las Galletas</h1>
+      <p data-i18n="heroText">Rosticceria napoletana artigianale: pizza, fritti, primi piatti e specialità preparate ogni giorno con passione.</p>
+      <div class="cta"><a class="btn primary" href="#menu" data-i18n="btnMenu">Scopri il menù</a><a class="btn" href="tel:+34922731223">☎ +34 922 731 223</a><a class="btn" href="#contatti" data-i18n="btnMap">Come arrivare</a></div>
+    </div>
+  </section>
+
+  <section class="intro section reveal">
+    <div><p class="eyebrow">Rosticceria Napoletana</p><h2 data-i18n="introTitle">Fatto a mano, come a Napoli.</h2></div>
+    <p data-i18n="introText">Da El Capricho trovi prodotti preparati ogni giorno: impasti, ripieni, fritti, piatti al forno e sapori della tradizione. Un angolo di Napoli nel cuore di Tenerife.</p>
+  </section>
+
+  <section class="specials section">
+    <div class="section-head reveal"><p class="eyebrow">Specialità</p><h2 data-i18n="specTitle">Le nostre specialità</h2></div>
+    <div class="cards">
+      <article class="card reveal"><img src="assets/pizza-teglia.jpg" alt="Pizza in teglia"><h3>Pizza</h3><p>Margherita, parigina, ripieni, salsiccia e friarielli.</p></article>
+      <article class="card reveal"><img src="assets/montanara.jpg" alt="Montanara"><h3>Fritti</h3><p>Montanare, frittatine, arancini, crocchè e pizza fritta.</p></article>
+      <article class="card reveal"><img src="assets/pasta-norma.jpg" alt="Piatti napoletani"><h3>Piatti</h3><p>Lasagna, parmigiana, pasta e patate, polpette e contorni.</p></article>
+    </div>
+  </section>
+
+  <section id="menu" class="section menu-section">
+    <div class="section-head reveal"><p class="eyebrow">Menù fotografico</p><h2>Menù</h2><p data-i18n="menuNote">Le nostre specialità, senza prezzi online. Il menù può cambiare secondo la disponibilità del giorno.</p></div>
+    <div id="filters" class="filters"></div>
+    <div id="menuGrid" class="menu-grid"></div>
+  </section>
+
+  <section id="buffet" class="buffet section reveal">
+    <div><p class="eyebrow">Feste e occasioni</p><h2 data-i18n="buffetTitle">Buffet napoletani</h2><p data-i18n="buffetText">Prepariamo buffet per compleanni, feste, riunioni e occasioni speciali: pizza, fritti, panini, piatti al forno e dolci.</p><a class="btn primary" href="tel:+34922731223" data-i18n="btnCall">Chiama ora</a></div>
+    <img src="assets/bancone.jpg" alt="Bancone El Capricho">
+  </section>
+
+  <section id="gallery" class="section">
+    <div class="section-head reveal"><p class="eyebrow">Galleria</p><h2 data-i18n="galleryTitle">Dentro El Capricho</h2></div>
+    <div class="gallery">
+      <img src="assets/hero-locale.jpg" alt="Locale El Capricho"><img src="assets/bancone.jpg" alt="Bancone"><img src="assets/pizze-prep.jpg" alt="Preparazione pizza"><img src="assets/teresa.jpg" alt="El Capricho staff"><img src="assets/staff.jpg" alt="Staff"><img src="assets/panino-cotoletta.jpg" alt="Panino cotoletta">
+    </div>
+  </section>
+
+  <section id="contatti" class="contact section reveal">
+    <div><p class="eyebrow">Vieni a trovarci</p><h2>Contatti</h2><p><strong>EL CAPRICHO</strong><br>Rosticceria Napoletana</p><p>Avenida Fernando Salazar Gonzalez 13A<br>38630 Las Galletas, Tenerife</p><p><a href="tel:+34922731223">☎ +34 922 731 223</a><br><a href="mailto:rosticceriaitalianatenerife@gmail.com">rosticceriaitalianatenerife@gmail.com</a></p><p data-i18n="hours">Orari aggiornati su Google.</p></div>
+    <iframe title="Mappa El Capricho" loading="lazy" src="https://www.google.com/maps?q=Avenida%20Fernando%20Salazar%20Gonzalez%2013A%20Las%20Galletas%2038630&output=embed"></iframe>
+  </section>
+</main>
+<footer><strong>EL CAPRICHO</strong> • Rosticceria Napoletana • Las Galletas, Tenerife • Dal cuore di Napoli alle Canarie</footer>
+</body>
+</html>
