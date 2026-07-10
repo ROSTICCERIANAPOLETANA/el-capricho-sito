@@ -7,6 +7,6 @@ function setLang(lang){document.documentElement.lang=lang;document.querySelector
 document.querySelectorAll('.langs button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 const grid=document.getElementById('menuGrid'),filters=document.getElementById('filters');
 const cats=['Tutto',...new Set(window.MENU.map(i=>i.category))];
-function render(cat='Tutto'){grid.innerHTML='';window.MENU.filter(i=>cat==='Tutto'||i.category===cat).forEach(i=>{let c=document.createElement('article');c.className='menu-card reveal in';c.innerHTML=`<img src="assets/${i.img}" alt="${i.name}"><div><h3>${i.name}</h3><p>${i.desc}</p></div>`;grid.appendChild(c)});document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b.textContent===cat))}
+function render(cat='Tutto'){grid.innerHTML='';window.MENU.filter(i=>cat==='Tutto'||i.category===cat).forEach(i=>{let c=document.createElement('article');c.className='menu-card reveal in';c.innerHTML=`<img src="${i.img}" alt="${i.name}"><div><h3>${i.name}</h3><p>${i.desc}</p></div>`;grid.appendChild(c)});document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b.textContent===cat))}
 cats.forEach(c=>{let b=document.createElement('button');b.className='filter';b.textContent=c;b.onclick=()=>render(c);filters.appendChild(b)});render();setLang(localStorage.getItem('lang')||'it');
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
