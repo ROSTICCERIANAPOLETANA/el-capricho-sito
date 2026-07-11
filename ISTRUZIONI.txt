@@ -1,0 +1,12 @@
+PROGETTO CORRETTO - EL CAPRICHO
+
+1. Sostituisci i file del vecchio progetto con tutti i file e la cartella "assets" presenti qui.
+2. In GitHub Desktop fai Commit to main e poi Push origin.
+3. Aspetta circa un minuto e aggiorna il sito.
+
+Per aggiungere una nuova foto:
+- mettila dentro la cartella assets;
+- usa un nome semplice senza spazi, ad esempio pizza-margherita.jpg;
+- in menu-data.js scrivi esattamente lo stesso nome dopo img:.
+
+Non caricare assets come file ZIP: deve restare una vera cartella.
