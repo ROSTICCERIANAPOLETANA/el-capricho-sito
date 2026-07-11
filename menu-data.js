@@ -9,7 +9,7 @@ window.MENU = [
   {category:'Pizza', name:'Pizza Diavola', desc:'Pomodoro, salame napoletano, mozzarella e piccante.', img:'pizza-teglia.jpg'},
   {category:'Pizza', name:'Pizza Parigina', desc:'Base pizza, pomodoro, prosciutto cotto, mozzarella e sfoglia.', img:'pizza-teglia.jpg'},
   {category:'Pizza', name:'Pizza Fritta', desc:'Ripiena con prosciutto cotto e mozzarella.', img:'montanara.jpg'},
-  {category:'Pizza', name:'Montanara fritta', desc:'Pizza fritta con pomodoro, parmigiano e basilico.', img:pizza-montanara.jpg'},
+  {category:'Pizza', name:'Montanara fritta', desc:'Pizza fritta con pomodoro, parmigiano e basilico.', img:'pizza-montanara.jpg'},
 
   {category:'Rosticceria', name:'Panino Napoletano', desc:'Salame, prosciutto cotto, uova, formaggio e pepe nero.', img:'panino-napoletano.jpg'},
   {category:'Rosticceria', name:'Hot Dog con massa di pizza', desc:'Würstel avvolto in impasto artigianale e cotto al forno.', img:'hotdog.jpg'},
