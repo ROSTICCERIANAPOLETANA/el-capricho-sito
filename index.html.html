@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="El Capricho, rosticceria napoletana a Las Galletas: pizza al taglio, fritti, cucina tradizionale, pane cafone e buffet su ordinazione.">
+  <meta name="theme-color" content="#8e173d">
+  <title>El Capricho | Rosticceria Napoletana a Las Galletas</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Restaurant",
+    "name":"El Capricho - Rosticceria Napoletana",
+    "servesCuisine":["Neapolitan","Italian"],
+    "telephone":"+34 922 731 223",
+    "email":"info@elcaprichotenerife.com",
+    "address":{
+      "@type":"PostalAddress",
+      "streetAddress":"Avenida Fernando Salazar González 13A",
+      "postalCode":"38630",
+      "addressLocality":"Las Galletas",
+      "addressRegion":"Santa Cruz de Tenerife",
+      "addressCountry":"ES"
+    }
+  }
+  </script>
+</head>
+<body>
+<header class="site-header" id="top">
+  <a class="brand" href="#top" aria-label="El Capricho home"><img src="assets/logo.png" alt="Logo El Capricho"><span><b>EL CAPRICHO</b><small>Rosticceria Napoletana</small></span></a>
+  <button class="menu-toggle" aria-label="Apri menu" aria-expanded="false">☰</button>
+  <nav class="nav" aria-label="Navigazione principale">
+    <a href="#specialita" data-i18n="navMenu">Menù</a><a href="#buffet">Buffet</a><a href="#pane">Pane Cafone</a><a href="#storia" data-i18n="navStory">Chi siamo</a><a href="#contatti" data-i18n="navContact">Contatti</a>
+  </nav>
+  <div class="langs"><button class="active" data-lang="it">IT</button><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
+</header>
+
+<main>
+<section class="hero">
+  <img src="assets/hero.jpg" alt="Vetrina di El Capricho piena di specialità napoletane">
+  <div class="hero-overlay"></div>
+  <div class="hero-content reveal">
+    <p class="eyebrow" data-i18n="heroEyebrow">Autentica tradizione napoletana</p>
+    <h1 data-i18n="heroTitle">Il vero sapore di Napoli a Las Galletas</h1>
+    <p data-i18n="heroText">Pizza, fritti, pane e piatti preparati ogni giorno con passione.</p>
+    <div class="hero-actions"><a class="btn primary" href="#specialita" data-i18n="discover">Scopri le specialità</a><a class="btn glass" href="#buffet" data-i18n="buffetOrder">Ordina un buffet</a></div>
+  </div>
+</section>
+
+<section class="quickbar" aria-label="Contatti rapidi">
+  <a href="tel:+34922731223"><span>☎</span><div><b data-i18n="call">Chiama ora</b><small>+34 922 731 223</small></div></a>
+  <a href="https://www.google.com/maps/search/?api=1&query=El+Capricho+Las+Galletas" target="_blank" rel="noopener"><span>⌖</span><div><b>Las Galletas</b><small>Arona, Tenerife</small></div></a>
+  <a href="#buffet"><span>🎉</span><div><b data-i18n="events">Feste ed eventi</b><small data-i18n="customBuffet">Buffet personalizzati</small></div></a>
+</section>
+
+<section class="intro section" id="storia">
+  <div class="section-heading reveal"><p class="eyebrow" data-i18n="ourIdentity">La nostra identità</p><h2 data-i18n="introTitle">Napoli, ogni giorno, nella nostra vetrina</h2><p data-i18n="introText">Una rosticceria autentica dove pizza, fritti, cucina e pane raccontano la tradizione con ingredienti selezionati e lavorazione artigianale.</p></div>
+  <div class="values">
+    <article class="reveal"><span>🔥</span><h3 data-i18n="freshTitle">Preparato ogni giorno</h3><p data-i18n="freshText">Produzione fresca, dal forno alla vetrina.</p></article>
+    <article class="reveal"><span>🇮🇹</span><h3 data-i18n="tradTitle">Ricette autentiche</h3><p data-i18n="tradText">Sapori e specialità della cucina napoletana.</p></article>
+    <article class="reveal"><span>🤝</span><h3 data-i18n="buffetTitle">Buffet su misura</h3><p data-i18n="buffetText">Soluzioni per compleanni, feste e aziende.</p></article>
+  </div>
+</section>
+
+<section class="menu-section section dark" id="specialita">
+  <div class="section-heading light reveal"><p class="eyebrow" data-i18n="menuEyebrow">La vetrina di El Capricho</p><h2 data-i18n="menuTitle">Le nostre specialità</h2><p data-i18n="menuText">Seleziona una categoria e scopri una parte della nostra produzione.</p></div>
+  <div class="tabs" role="tablist">
+    <button class="active" data-filter="pizza">🍕 <span data-i18n="pizzas">Pizze</span></button>
+    <button data-filter="fritti">🥟 <span data-i18n="fried">Fritti</span></button>
+    <button data-filter="cucina">🍝 <span data-i18n="kitchen">Cucina</span></button>
+    <button data-filter="tradizione">🥖 <span data-i18n="tradition">Tradizione</span></button>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+  <p class="availability" data-i18n="availability">La disponibilità può cambiare durante la giornata: chiedici cosa trovi oggi in vetrina.</p>
+</section>
+
+<section class="bread section" id="pane">
+  <div class="bread-image reveal"><img src="assets/pane-cafone.jpg" alt="Pane cafone napoletano artigianale"><span data-i18n="houseSpecialty">Specialità della casa</span></div>
+  <div class="bread-copy reveal"><p class="eyebrow">Pane Cafone Napoletano</p><h2 data-i18n="breadTitle">Crosta fragrante, mollica soffice, profumo di casa</h2><p data-i18n="breadText">Il nostro pane artigianale merita uno spazio tutto suo. Preparato secondo la tradizione e disponibile fino a esaurimento.</p><a class="btn primary wa-bread" href="#" data-i18n="reserveBread">Prenota il pane</a></div>
+</section>
+
+<section class="buffet section" id="buffet">
+  <div class="buffet-copy reveal"><p class="eyebrow" data-i18n="buffetEyebrow">Buffet ed eventi</p><h2 data-i18n="buffetHeading">Portiamo El Capricho alla tua festa</h2><p data-i18n="buffetIntro">Prepariamo buffet su ordinazione per compleanni, riunioni, feste private ed eventi aziendali. Scegli il numero di persone e raccontaci cosa desideri.</p>
+    <ul><li data-i18n="buffetOne">Fritti e rosticceria napoletana</li><li data-i18n="buffetTwo">Pizza, panini e specialità da forno</li><li data-i18n="buffetThree">Composizioni personalizzate</li><li data-i18n="buffetFour">Ritiro concordato in negozio</li></ul>
+  </div>
+  <div class="buffet-visual reveal"><img src="assets/hero.jpg" alt="Buffet e vetrina El Capricho"><div class="buffet-card"><strong data-i18n="buffetCtaTitle">Richiedi il tuo buffet</strong><span data-i18n="buffetCtaText">Compila i dati: si aprirà un messaggio pronto da inviare.</span></div></div>
+  <form class="buffet-form reveal" id="buffetForm">
+    <label><span data-i18n="name">Nome</span><input name="name" required autocomplete="name"></label>
+    <label><span data-i18n="phone">Telefono</span><input name="phone" required inputmode="tel" autocomplete="tel"></label>
+    <div class="two"><label><span data-i18n="date">Data evento</span><input name="date" type="date" required></label><label><span data-i18n="people">Numero persone</span><input name="people" type="number" min="5" required></label></div>
+    <label><span data-i18n="eventType">Tipo di evento</span><select name="event"><option>Compleanno</option><option>Festa privata</option><option>Evento aziendale</option><option>Altro</option></select></label>
+    <label><span data-i18n="request">Cosa vorresti nel buffet?</span><textarea name="details" rows="4" placeholder="Pizza, fritti, panini, piatti..." required></textarea></label>
+    <button class="btn primary" type="submit" data-i18n="sendWhatsapp">Invia richiesta su WhatsApp</button>
+  </form>
+  <p class="wa-note" data-i18n="waNote">WhatsApp +34 666 196 026 è riservato alle richieste buffet. Non si accettano ordini giornalieri tramite WhatsApp.</p>
+</section>
+
+<section class="gallery-strip" aria-label="Galleria prodotti">
+  <img src="assets/pizza-margherita.jpg" alt="Pizza Margherita"><img src="assets/frittatine.jpg" alt="Frittatine di pasta"><img src="assets/pasta-forno.jpg" alt="Pasta al forno"><img src="assets/crocche.jpg" alt="Crocchè di patate"><img src="assets/casatiello.jpg" alt="Casatiello napoletano">
+</section>
+
+<section class="contact section" id="contatti">
+  <div class="contact-card reveal"><p class="eyebrow" data-i18n="contactEyebrow">Vieni a trovarci</p><h2>El Capricho</h2><p><strong>Rosticceria Napoletana</strong><br>Avenida Fernando Salazar González 13A<br>38630 Las Galletas, Tenerife</p><p class="contact-lines"><a href="tel:+34922731223">☎ +34 922 731 223</a><br><a href="mailto:info@elcaprichotenerife.com">✉ info@elcaprichotenerife.com</a></p><div class="contact-actions"><a class="btn primary" href="tel:+34922731223" data-i18n="callUs">Chiamaci</a><a class="btn outline" href="https://www.google.com/maps/search/?api=1&query=Avenida+Fernando+Salazar+Gonzalez+13A+Las+Galletas" target="_blank" rel="noopener" data-i18n="directions">Indicazioni</a></div><small data-i18n="hoursNote">Gli orari aggiornati sono disponibili sulla scheda Google.</small></div>
+  <div class="contact-photo reveal"><img src="assets/hero.jpg" alt="Interno e banco El Capricho"></div>
+</section>
+</main>
+
+<a class="floating-wa" href="#buffet" aria-label="Ordina buffet">🎉 <span data-i18n="floatingBuffet">Ordina buffet</span></a>
+<footer><img src="assets/logo.png" alt=""><p>© 2026 El Capricho · Rosticceria Napoletana · Las Galletas</p><a href="#top">↑</a></footer>
+<script src="script.js"></script>
+</body></html>
