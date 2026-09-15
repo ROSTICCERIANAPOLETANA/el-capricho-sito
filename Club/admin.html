@@ -7,7 +7,7 @@
 <title>El Capricho Club · Admin</title>
 <style>
 :root{--y:#f6c515;--ink:#171717;--paper:#fffaf0;--muted:#6d6d6d;--danger:#b42318;--ok:#16794d}
-*{box-sizing:border-box}body{margin:0;background:#efede7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);padding-bottom:40px}header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:26px 20px;text-align:center}header img{width:88px;height:88px;object-fit:contain;border-radius:20px;background:#fff;padding:6px}h1{margin:8px 0 0;font-size:28px}main{padding:18px}.card{background:#fff;border:1px solid #eee;border-radius:20px;padding:18px;margin-bottom:15px;box-shadow:0 6px 20px #0000000c}input,button{width:100%;padding:13px 14px;border-radius:13px;font-size:16px}input{border:1px solid #d7d7d7;margin:6px 0 10px}button{border:0;background:var(--y);font-weight:800;cursor:pointer}button.secondary{background:#222;color:#fff}button.danger{background:#ffe6e1;color:var(--danger)}button:disabled{opacity:.55}.hidden{display:none}.small{font-size:13px;color:var(--muted)}.status{margin-top:10px;font-size:14px}.error{color:var(--danger)}.ok{color:var(--ok)}.customer{border:1px solid #ececec;border-radius:16px;padding:14px;margin:10px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.customer h3{margin:0 0 6px}.badge{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.points{font-size:34px;font-weight:900}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tools input{grid-column:1/-1;margin:0}.tools button{margin:0}.topbar{display:flex;gap:8px;align-items:center}.topbar button{width:auto;padding:10px 14px}.spacer{flex:1}.remember{display:flex;align-items:center;gap:10px;margin:4px 0 12px;font-size:14px}.remember input{width:auto;margin:0}.face{background:#111;color:#fff;margin-top:8px}.login-note{margin-top:9px;line-height:1.35}
+*{box-sizing:border-box}body{margin:0;background:#efede7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);padding-bottom:40px}header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:26px 20px;text-align:center}header img{width:88px;height:88px;object-fit:contain;border-radius:20px;background:#fff;padding:6px}h1{margin:8px 0 0;font-size:28px}main{padding:18px}.card{background:#fff;border:1px solid #eee;border-radius:20px;padding:18px;margin-bottom:15px;box-shadow:0 6px 20px #0000000c}input,button{width:100%;padding:13px 14px;border-radius:13px;font-size:16px}input{border:1px solid #d7d7d7;margin:6px 0 10px}button{border:0;background:var(--y);font-weight:800;cursor:pointer}button.secondary{background:#222;color:#fff}button.ghost{background:#f3f3f3;color:#222}button.danger{background:#ffe6e1;color:var(--danger)}button:disabled{opacity:.55}.hidden{display:none}.small{font-size:13px;color:var(--muted)}.status{margin-top:10px;font-size:14px}.error{color:var(--danger)}.ok{color:var(--ok)}.customer{border:1px solid #ececec;border-radius:16px;padding:14px;margin:10px 0}.customer h3{margin:0 0 6px}.badge{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.points{font-size:34px;font-weight:900}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tools input{grid-column:1/-1;margin:0}.tools button{margin:0}.topbar{display:flex;gap:8px;align-items:center}.topbar button{width:auto;padding:10px 14px}.spacer{flex:1}.remember{display:flex;align-items:center;gap:10px;margin:4px 0 12px;font-size:14px}.remember input{width:auto;margin:0}.face{background:#111;color:#fff;margin-top:8px}.login-note{margin-top:9px;line-height:1.35}.history{margin-top:12px;border-top:1px solid #eee;padding-top:10px}.move{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start;padding:9px 0;border-bottom:1px solid #f0f0f0}.move:last-child{border-bottom:0}.move .plus{color:var(--ok);font-weight:900}.move .minus{color:var(--danger);font-weight:900}.move time{font-size:11px;color:var(--muted);white-space:nowrap}.customer-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}@media(max-width:520px){.customer-actions,.tools{grid-template-columns:1fr}.tools input{grid-column:1}.topbar{flex-wrap:wrap}.topbar .spacer{display:none}.topbar button{width:100%}}
 </style>
 </head>
 <body><div class="wrap">
@@ -18,7 +18,7 @@
 <p class="small">Accesso riservato a Rosticceria Italiana Tenerife.</p>
 <input id="email" type="email" value="rosticceriaitalianatenerife@gmail.com" readonly autocomplete="username">
 <input id="password" type="password" placeholder="Password" autocomplete="current-password">
-<label class="remember"><input id="remember" type="checkbox" checked> Ricorda password / accesso su questo dispositivo</label>
+<label class="remember"><input id="remember" type="checkbox" checked> Ricorda accesso su questo dispositivo</label>
 <button id="loginBtn">Accedi</button>
 <button id="faceIdBtn" class="face" type="button">🔐 Accedi con Face ID / password salvata</button>
 <p class="small login-note">Su iPhone la password resta nel Portachiavi/iCloud Passwords: Safari può richiamarla con Face ID. Il sito non salva la password in chiaro.</p>
@@ -57,7 +57,6 @@ function saveAccessToken(token){
   localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);
   if($('remember').checked)localStorage.setItem(TOKEN_KEY,token);else sessionStorage.setItem(TOKEN_KEY,token);
 }
-
 async function login(){
   const email=$('email').value.trim(),password=$('password').value;
   if(!password){$('password').focus();return}
@@ -66,18 +65,16 @@ async function login(){
     const data=await jsonFetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({email,password})});
     accessToken=data.access_token; saveAccessToken(accessToken);
     const allowed=await rpc('club_admin_allowed');
-    if(allowed!==true){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';throw new Error('Account non autorizzato');}
-    setLogged(true); $('search').focus(); await searchCustomers();
+    if(allowed!==true){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';throw new Error('Account non autorizzato')}
+    setLogged(true);$('search').focus();await searchCustomers();
   }catch(e){$('loginStatus').textContent='Accesso non riuscito: '+e.message;$('loginStatus').className='status error'}
   finally{$('loginBtn').disabled=false}
 }
 function logout(){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';$('password').value='';$('results').innerHTML='';setLogged(false)}
 function faceIdLogin(){
   $('loginStatus').textContent='Tocca il campo Password e scegli la password salvata: iPhone userà Face ID per sbloccarla.';
-  $('loginStatus').className='status';
-  $('password').focus();
+  $('loginStatus').className='status';$('password').focus();
 }
-
 async function searchCustomers(){
   $('searchStatus').textContent='Ricerca…';$('searchStatus').className='status';
   try{
@@ -99,29 +96,34 @@ function renderCustomers(list){
       <button onclick="adjust('${c.id}',1,this)">➕ Aggiungi</button>
       <button class="danger" onclick="adjust('${c.id}',-1,this)">➖ Togli</button>
     </div>
-    <div class="status msg"></div>
+    <div class="customer-actions"><button class="ghost" onclick="loadHistory('${c.id}',this)">🧾 Storico movimenti</button><button class="ghost" onclick="copyCode('${esc(c.member_code)}',this)">📋 Copia codice</button></div>
+    <div class="status msg"></div><div class="history hidden"></div>
   </div>`).join('');
 }
 async function adjust(id,sign,btn){
   const card=btn.closest('.customer'),qty=Math.abs(parseInt(card.querySelector('.delta').value||'0',10));
-  const desc=card.querySelector('.desc').value.trim(); const msg=card.querySelector('.msg');
+  const desc=card.querySelector('.desc').value.trim(),msg=card.querySelector('.msg');
   if(!qty){msg.textContent='Inserisci il numero di punti.';msg.className='status msg error';return}
-  const delta=qty*sign;
-  if(sign<0&&!confirm(`Togliere ${qty} punti a questo cliente?`))return;
+  const delta=qty*sign;if(sign<0&&!confirm(`Togliere ${qty} punti a questo cliente?`))return;
   btn.disabled=true;msg.textContent='Aggiornamento…';msg.className='status msg';
-  try{
-    const newPoints=await rpc('club_admin_adjust_points',{p_customer:id,p_delta:delta,p_description:desc||null});
-    msg.textContent=`Fatto. Nuovo saldo: ${newPoints} punti.`;msg.className='status msg ok';
-    await searchCustomers();
-  }catch(e){msg.textContent='Errore: '+e.message;msg.className='status msg error'}
-  finally{btn.disabled=false}
+  try{const newPoints=await rpc('club_admin_adjust_points',{p_customer:id,p_delta:delta,p_description:desc||null});msg.textContent=`Fatto. Nuovo saldo: ${newPoints} punti.`;msg.className='status msg ok';await searchCustomers()}
+  catch(e){msg.textContent='Errore: '+e.message;msg.className='status msg error'}finally{btn.disabled=false}
 }
-
+async function loadHistory(id,btn){
+  const card=btn.closest('.customer'),box=card.querySelector('.history');
+  if(!box.classList.contains('hidden')){box.classList.add('hidden');btn.textContent='🧾 Storico movimenti';return}
+  btn.disabled=true;btn.textContent='Carico…';
+  try{
+    const list=await rpc('club_admin_history',{p_customer:id,p_limit:30});
+    box.innerHTML=(Array.isArray(list)&&list.length)?list.map(m=>{const d=new Date(m.created_at);const sign=Number(m.points)>=0?'+':'';return `<div class="move"><span class="${Number(m.points)>=0?'plus':'minus'}">${sign}${m.points}</span><div>${esc(m.description||'Movimento punti')}</div><time>${d.toLocaleDateString('it-IT')} ${d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}</time></div>`}).join(''):'<div class="small">Nessun movimento registrato.</div>';
+    box.classList.remove('hidden');btn.textContent='✖ Chiudi storico';
+  }catch(e){box.innerHTML='<div class="status error">Storico non disponibile: '+esc(e.message)+'</div>';box.classList.remove('hidden');btn.textContent='✖ Chiudi storico'}finally{btn.disabled=false}
+}
+async function copyCode(code,btn){
+  try{await navigator.clipboard.writeText(code);const old=btn.textContent;btn.textContent='✅ Copiato';setTimeout(()=>btn.textContent=old,1200)}catch{alert('Codice socio: '+code)}
+}
 $('loginBtn').addEventListener('click',login);$('faceIdBtn').addEventListener('click',faceIdLogin);$('logoutBtn').addEventListener('click',logout);$('searchBtn').addEventListener('click',searchCustomers);
 $('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('search').addEventListener('keydown',e=>{if(e.key==='Enter')searchCustomers()});
-
-(async()=>{
-  if(accessToken){try{const allowed=await rpc('club_admin_allowed');if(allowed===true){setLogged(true);await searchCustomers();return}}catch(e){} logout()}
-})();
+(async()=>{if(accessToken){try{const allowed=await rpc('club_admin_allowed');if(allowed===true){setLogged(true);await searchCustomers();return}}catch(e){}logout()}})();
 </script>
 </body></html>
