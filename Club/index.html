@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6c515">
+<title>El Capricho Club</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../logo.png">
+<link rel="apple-touch-icon" href="../logo.png">
+<style>
+:root{--y:#f6c515;--ink:#171717;--paper:#fffaf0;--muted:#6d6d6d}
+*{box-sizing:border-box}body{margin:0;background:#f4f1e9;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 30px #0001}
+header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:28px 20px 22px;text-align:center}
+.logo{width:112px;height:112px;object-fit:contain;border-radius:24px;background:white;padding:6px;box-shadow:0 8px 24px #0002}
+h1{margin:8px 0 0;font-size:31px}header p{margin:3px 0;font-weight:700}
+main{padding:18px}.card{background:#fff;border-radius:22px;padding:18px;margin-bottom:15px;box-shadow:0 6px 22px #0000000d;border:1px solid #eee}
+.hero{background:#191919;color:white}.points{font-size:46px;font-weight:900;color:#ffd329}.small{color:#777;font-size:14px}.hero .small{color:#ccc}
+.progress{height:12px;background:#555;border-radius:20px;overflow:hidden;margin:12px 0}.progress i{display:block;width:5%;height:100%;background:var(--y)}
+button,a.btn{display:block;width:100%;border:0;border-radius:15px;padding:14px 16px;font-size:16px;font-weight:800;text-align:center;text-decoration:none;background:var(--y);color:#111;margin-top:10px}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;margin:6px 0;font-size:16px}
+.rewards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.reward{padding:12px 7px;background:#fff8d6;border-radius:15px;text-align:center;font-size:13px}.reward b{display:block;font-size:19px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.nav{background:#f7f2e7;border-radius:14px;padding:12px 4px;text-align:center;font-size:13px;font-weight:700}
+.hidden{display:none}.id{font-family:ui-monospace,monospace;background:#f3f3f3;padding:8px;border-radius:8px;word-break:break-all}
+footer{text-align:center;padding:10px 20px 28px;color:#777;font-size:12px}
+</style>
+</head>
+<body><div class="app">
+<header><img class="logo" src="../logo.png" alt="El Capricho"><h1>El Capricho Club</h1><p>La felicità ha il sapore di Napoli 🇮🇹</p></header>
+<main>
+<section id="signup" class="card">
+<h2>¡Únete al Club! 🎁</h2><p>Regístrate gratis y empieza a acumular puntos con tus compras.</p>
+<input id="name" placeholder="Tu nombre" autocomplete="name"><input id="phone" placeholder="Tu teléfono" inputmode="tel" autocomplete="tel">
+<label class="small"><input id="privacy" type="checkbox" style="width:auto"> Acepto el uso de mis datos para gestionar mi tarjeta de fidelidad.</label>
+<button onclick="register()">Crear mi tarjeta</button>
+</section>
+
+<section id="member" class="hidden">
+<div class="card"><h2 id="hello">¡Hola!</h2><p>Gracias por formar parte de El Capricho Club ❤️</p></div>
+<div class="card hero"><div class="small">TUS PUNTOS</div><div class="points"><span id="points">10</span> <small style="font-size:16px">puntos</small></div>
+<div class="progress"><i id="bar"></i></div><div class="small" id="next">Te faltan 40 puntos para tu próximo premio.</div></div>
+<div class="card"><h3>Tu tarjeta digital</h3><p class="small">En caja muestra este código de socio.</p><div class="id" id="memberId"></div></div>
+<div class="card"><h3>Premios destacados</h3><div class="rewards">
+<div class="reward">🥤<b>50</b> puntos<br>Premio 1</div><div class="reward">🍘<b>100</b> puntos<br>Premio 2</div><div class="reward">🍕<b>200</b> puntos<br>Premio 3</div></div>
+<p class="small">Los premios definitivos los configuraremos antes del lanzamiento público.</p></div>
+<nav><div class="nav">🏠<br>Inicio</div><div class="nav">🎁<br>Premios</div><div class="nav">👤<br>Mi perfil</div></nav>
+<button onclick="installHelp()">📲 Instalar El Capricho Club</button>
+<a class="btn" href="https://elcaprichotenerife.com/">🌐 Visitar El Capricho</a>
+</section>
+</main><footer>El Capricho · Rosticceria Napoletana · Tenerife</footer>
+</div>
+<script>
+const KEY="elcapricho_member_v2";
+function load(){let u=JSON.parse(localStorage.getItem(KEY)||"null");if(!u)return;
+document.querySelector("#signup").classList.add("hidden");document.querySelector("#member").classList.remove("hidden");
+hello.textContent="¡Hola, "+u.name+"! 👋";points.textContent=u.points;memberId.textContent=u.id;
+let targets=[50,100,200],nextT=targets.find(x=>x>u.points)||200;
+bar.style.width=Math.min(100,u.points/nextT*100)+"%";
+next.textContent=u.points>=200?"¡Ya puedes acceder a un premio!":"Te faltan "+(nextT-u.points)+" puntos para tu próximo premio.";
+}
+function register(){let n=name.value.trim(),p=phone.value.trim();if(!n||!p)return alert("Escribe tu nombre y teléfono.");if(!privacy.checked)return alert("Acepta la gestión de datos para crear la tarjeta.");
+let id="EC-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+localStorage.setItem(KEY,JSON.stringify({name:n,phone:p,id,points:10,created:new Date().toISOString()}));load()}
+function installHelp(){alert("iPhone: pulsa Compartir y después «Añadir a pantalla de inicio». Android: abre el menú del navegador y pulsa «Instalar aplicación» o «Añadir a pantalla de inicio».");}
+load(); if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+</script></body></html>

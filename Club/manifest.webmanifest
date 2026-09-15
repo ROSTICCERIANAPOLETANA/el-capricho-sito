@@ -1,0 +1,17 @@
+{
+  "name": "El Capricho Club",
+  "short_name": "Capricho Club",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#f6c515",
+  "icons": [
+    {
+      "src": "../logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
