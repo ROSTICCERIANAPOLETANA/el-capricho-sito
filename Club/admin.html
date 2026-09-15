@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6c515">
+<title>El Capricho Club · Admin</title>
+<style>
+:root{--y:#f6c515;--ink:#171717;--paper:#fffaf0;--muted:#6d6d6d;--danger:#b42318;--ok:#16794d}
+*{box-sizing:border-box}body{margin:0;background:#efede7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);padding-bottom:40px}header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:26px 20px;text-align:center}header img{width:88px;height:88px;object-fit:contain;border-radius:20px;background:#fff;padding:6px}h1{margin:8px 0 0;font-size:28px}main{padding:18px}.card{background:#fff;border:1px solid #eee;border-radius:20px;padding:18px;margin-bottom:15px;box-shadow:0 6px 20px #0000000c}input,button{width:100%;padding:13px 14px;border-radius:13px;font-size:16px}input{border:1px solid #d7d7d7;margin:6px 0 10px}button{border:0;background:var(--y);font-weight:800;cursor:pointer}button.secondary{background:#222;color:#fff}button.danger{background:#ffe6e1;color:var(--danger)}button:disabled{opacity:.55}.hidden{display:none}.small{font-size:13px;color:var(--muted)}.status{margin-top:10px;font-size:14px}.error{color:var(--danger)}.ok{color:var(--ok)}.customer{border:1px solid #ececec;border-radius:16px;padding:14px;margin:10px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.customer h3{margin:0 0 6px}.badge{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.points{font-size:34px;font-weight:900}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tools input{grid-column:1/-1;margin:0}.tools button{margin:0}.topbar{display:flex;gap:8px;align-items:center}.topbar button{width:auto;padding:10px 14px}.spacer{flex:1}
+</style>
+</head>
+<body><div class="wrap">
+<header><img src="../logo.png" alt="El Capricho"><h1>El Capricho Club · Admin</h1><div>Gestione clienti e punti</div></header>
+<main>
+<section id="loginCard" class="card">
+<h2>Accesso amministratore</h2>
+<p class="small">Accesso riservato a Rosticceria Italiana Tenerife.</p>
+<input id="email" type="email" value="rosticceriaitalianatenerife@gmail.com" readonly>
+<input id="password" type="password" placeholder="Password Supabase Auth" autocomplete="current-password">
+<button id="loginBtn">Accedi</button>
+<div id="loginStatus" class="status"></div>
+</section>
+
+<section id="adminArea" class="hidden">
+<div class="card topbar"><strong>Pannello cassa</strong><span class="spacer"></span><button id="logoutBtn" class="secondary">Esci</button></div>
+<div class="card">
+<h2>Cerca cliente</h2>
+<input id="search" placeholder="Nome, telefono o codice socio">
+<button id="searchBtn">Cerca</button>
+<div id="searchStatus" class="status"></div>
+</div>
+<div id="results"></div>
+</section>
+</main></div>
+<script>
+const SUPABASE_URL='https://qbddxrselxsprstvtkjn.supabase.co';
+const SUPABASE_KEY='sb_publishable_kyop1OtqIqFA1veH42AAJg_oaad6_5B';
+const $=id=>document.getElementById(id);
+let accessToken=sessionStorage.getItem('elcap_admin_token')||'';
+
+async function jsonFetch(url,options={}){
+  const res=await fetch(url,options); const text=await res.text();
+  let data=null; try{data=text?JSON.parse(text):null}catch{data=text}
+  if(!res.ok) throw new Error(data?.message||data?.error_description||data?.hint||String(data||'Errore'));
+  return data;
+}
+async function rpc(name,body={}){
+  return jsonFetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${accessToken}`},body:JSON.stringify(body)});
+}
+function setLogged(logged){$('loginCard').classList.toggle('hidden',logged);$('adminArea').classList.toggle('hidden',!logged)}
+
+async function login(){
+  const email=$('email').value.trim(),password=$('password').value;
+  if(!password)return;
+  $('loginBtn').disabled=true;$('loginStatus').textContent='Accesso in corso…';$('loginStatus').className='status';
+  try{
+    const data=await jsonFetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({email,password})});
+    accessToken=data.access_token; sessionStorage.setItem('elcap_admin_token',accessToken);
+    const allowed=await rpc('club_admin_allowed');
+    if(allowed!==true){sessionStorage.removeItem('elcap_admin_token');accessToken='';throw new Error('Account non autorizzato');}
+    setLogged(true); $('search').focus(); await searchCustomers();
+  }catch(e){$('loginStatus').textContent='Accesso non riuscito: '+e.message;$('loginStatus').className='status error'}
+  finally{$('loginBtn').disabled=false}
+}
+function logout(){sessionStorage.removeItem('elcap_admin_token');accessToken='';$('password').value='';$('results').innerHTML='';setLogged(false)}
+
+async function searchCustomers(){
+  $('searchStatus').textContent='Ricerca…';$('searchStatus').className='status';
+  try{
+    const list=await rpc('club_admin_search',{p_query:$('search').value.trim()});
+    renderCustomers(Array.isArray(list)?list:[]);
+    $('searchStatus').textContent=list?.length?`${list.length} cliente/i trovati`:'Nessun cliente trovato';
+  }catch(e){$('searchStatus').textContent='Errore: '+e.message;$('searchStatus').className='status error'}
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCustomers(list){
+  $('results').innerHTML=list.map(c=>`<div class="card customer" data-id="${c.id}">
+    <h3>${esc(c.name)}</h3>
+    <div><span class="badge">${esc(c.member_code)}</span></div>
+    <div class="small" style="margin-top:6px">📞 ${esc(c.phone)}</div>
+    <div class="points">${c.points} <span style="font-size:15px">punti</span></div>
+    <div class="tools">
+      <input class="delta" type="number" min="1" step="1" placeholder="Numero punti, es. 15">
+      <input class="desc" placeholder="Descrizione, es. acquisto / premio">
+      <button onclick="adjust('${c.id}',1,this)">➕ Aggiungi</button>
+      <button class="danger" onclick="adjust('${c.id}',-1,this)">➖ Togli</button>
+    </div>
+    <div class="status msg"></div>
+  </div>`).join('');
+}
+async function adjust(id,sign,btn){
+  const card=btn.closest('.customer'),qty=Math.abs(parseInt(card.querySelector('.delta').value||'0',10));
+  const desc=card.querySelector('.desc').value.trim(); const msg=card.querySelector('.msg');
+  if(!qty){msg.textContent='Inserisci il numero di punti.';msg.className='status msg error';return}
+  const delta=qty*sign;
+  if(sign<0&&!confirm(`Togliere ${qty} punti a questo cliente?`))return;
+  btn.disabled=true;msg.textContent='Aggiornamento…';msg.className='status msg';
+  try{
+    const newPoints=await rpc('club_admin_adjust_points',{p_customer:id,p_delta:delta,p_description:desc||null});
+    msg.textContent=`Fatto. Nuovo saldo: ${newPoints} punti.`;msg.className='status msg ok';
+    await searchCustomers();
+  }catch(e){msg.textContent='Errore: '+e.message;msg.className='status msg error'}
+  finally{btn.disabled=false}
+}
+
+$('loginBtn').addEventListener('click',login);$('logoutBtn').addEventListener('click',logout);$('searchBtn').addEventListener('click',searchCustomers);
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('search').addEventListener('keydown',e=>{if(e.key==='Enter')searchCustomers()});
+
+(async()=>{
+  if(accessToken){try{const allowed=await rpc('club_admin_allowed');if(allowed===true){setLogged(true);await searchCustomers();return}}catch(e){} logout()}
+})();
+</script>
+</body></html>
