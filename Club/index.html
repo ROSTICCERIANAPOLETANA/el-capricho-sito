@@ -54,6 +54,7 @@ footer{text-align:center;padding:10px 20px 28px;color:#777;font-size:12px}
 const SUPABASE_URL='https://qbddxrselxsprstvtkjn.supabase.co';
 const SUPABASE_KEY='sb_publishable_kyop1OtqIqFA1veH42AAJg_oaad6_5B';
 const TOKEN_KEY='elcapricho_club_token_v1';
+const $=id=>document.getElementById(id);
 let currentMember=null;
 let rewardTargets=[50,100,200];
 
@@ -71,25 +72,25 @@ async function rpc(name,body={}){
 }
 
 function showSignup(message='',isError=false){
-  signup.classList.remove('hidden');member.classList.add('hidden');
-  signupStatus.textContent=message;signupStatus.className='status'+(isError?' error':'');
+  $('signup').classList.remove('hidden');$('member').classList.add('hidden');
+  $('signupStatus').textContent=message;$('signupStatus').className='status'+(isError?' error':'');
 }
 function showMember(u){
-  currentMember=u;signup.classList.add('hidden');member.classList.remove('hidden');
-  hello.textContent=`¡Hola, ${u.name}! 👋`;points.textContent=u.points;memberId.textContent=u.member_code;
+  currentMember=u;$('signup').classList.add('hidden');$('member').classList.remove('hidden');
+  $('hello').textContent=`¡Hola, ${u.name}! 👋`;$('points').textContent=u.points;$('memberId').textContent=u.member_code;
   const nextT=rewardTargets.find(x=>x>u.points)||rewardTargets[rewardTargets.length-1]||200;
-  bar.style.width=Math.min(100,(u.points/nextT)*100)+'%';
-  next.textContent=u.points>=nextT&&u.points>=Math.max(...rewardTargets,0)?'¡Ya puedes acceder a un premio!':`Te faltan ${Math.max(0,nextT-u.points)} puntos para tu próximo premio.`;
+  $('bar').style.width=Math.min(100,(u.points/nextT)*100)+'%';
+  $('next').textContent=u.points>=nextT&&u.points>=Math.max(...rewardTargets,0)?'¡Ya puedes acceder a un premio!':`Te faltan ${Math.max(0,nextT-u.points)} puntos para tu próximo premio.`;
 }
 async function loadRewards(){
   try{
     const list=await rpc('club_rewards');
     if(Array.isArray(list)&&list.length){
       rewardTargets=list.map(x=>Number(x.points_required)).filter(Number.isFinite).sort((a,b)=>a-b);
-      rewards.innerHTML=list.slice(0,3).map((r,i)=>`<div class="reward">${['🥤','🍘','🍕'][i]||'🎁'}<b>${r.points_required}</b> puntos<br>${escapeHtml(r.name)}</div>`).join('');
+      $('rewards').innerHTML=list.slice(0,3).map((r,i)=>`<div class="reward">${['🥤','🍘','🍕'][i]||'🎁'}<b>${r.points_required}</b> puntos<br>${escapeHtml(r.name)}</div>`).join('');
     }
   }catch(e){
-    rewards.innerHTML='<div class="reward">🎁<b>50</b> puntos</div><div class="reward">🎁<b>100</b> puntos</div><div class="reward">🎁<b>200</b> puntos</div>';
+    $('rewards').innerHTML='<div class="reward">🎁<b>50</b> puntos</div><div class="reward">🎁<b>100</b> puntos</div><div class="reward">🎁<b>200</b> puntos</div>';
   }
 }
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
@@ -108,10 +109,10 @@ async function refreshMember(){
 }
 
 async function registerMember(){
-  const n=name.value.trim(),p=phone.value.trim();
+  const n=$('name').value.trim(),p=$('phone').value.trim();
   if(!n||!p)return alert('Escribe tu nombre y teléfono.');
-  if(!privacy.checked)return alert('Acepta la gestión de datos para crear la tarjeta.');
-  registerBtn.disabled=true;signupStatus.textContent='Creando tu tarjeta…';signupStatus.className='status';
+  if(!$('privacy').checked)return alert('Acepta la gestión de datos para crear la tarjeta.');
+  $('registerBtn').disabled=true;$('signupStatus').textContent='Creando tu tarjeta…';$('signupStatus').className='status';
   try{
     const rows=await rpc('club_register',{p_name:n,p_phone:p});
     const u=Array.isArray(rows)?rows[0]:null;
@@ -121,9 +122,9 @@ async function registerMember(){
     showMember(u);
   }catch(e){
     const msg=String(e.message||'');
-    signupStatus.textContent=msg.includes('PHONE_EXISTS')?'Este teléfono ya está registrado. Pide ayuda en caja para recuperar tu tarjeta.':'No se ha podido crear la tarjeta. Inténtalo de nuevo.';
-    signupStatus.className='status error';
-  }finally{registerBtn.disabled=false}
+    $('signupStatus').textContent=msg.includes('PHONE_EXISTS')?'Este teléfono ya está registrado. Pide ayuda en caja para recuperar tu tarjeta.':'No se ha podido crear la tarjeta. Inténtalo de nuevo.';
+    $('signupStatus').className='status error';
+  }finally{$('registerBtn').disabled=false}
 }
 
 function installHelp(){alert('iPhone: pulsa Compartir y después «Añadir a pantalla de inicio». Android: abre el menú del navegador y pulsa «Instalar aplicación» o «Añadir a pantalla de inicio».');}
