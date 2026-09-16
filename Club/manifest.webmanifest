@@ -1,9 +1,12 @@
 {
+  "id": "/Club/",
   "name": "El Capricho Club",
   "short_name": "Capricho Club",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Tarjeta digital de fidelidad de El Capricho Rosticceria Napoletana Tenerife",
+  "start_url": "/Club/",
+  "scope": "/Club/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#fffaf0",
   "theme_color": "#f6c515",
   "icons": [
@@ -11,7 +14,13 @@
       "src": "../logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "../logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
