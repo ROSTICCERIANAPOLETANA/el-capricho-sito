@@ -1,129 +1,14 @@
-<!doctype html>
-<html lang="it">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f6c515">
-<title>El Capricho Club · Admin</title>
-<style>
-:root{--y:#f6c515;--ink:#171717;--paper:#fffaf0;--muted:#6d6d6d;--danger:#b42318;--ok:#16794d}
-*{box-sizing:border-box}body{margin:0;background:#efede7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);padding-bottom:40px}header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:26px 20px;text-align:center}header img{width:88px;height:88px;object-fit:contain;border-radius:20px;background:#fff;padding:6px}h1{margin:8px 0 0;font-size:28px}main{padding:18px}.card{background:#fff;border:1px solid #eee;border-radius:20px;padding:18px;margin-bottom:15px;box-shadow:0 6px 20px #0000000c}input,button{width:100%;padding:13px 14px;border-radius:13px;font-size:16px}input{border:1px solid #d7d7d7;margin:6px 0 10px}button{border:0;background:var(--y);font-weight:800;cursor:pointer}button.secondary{background:#222;color:#fff}button.ghost{background:#f3f3f3;color:#222}button.danger{background:#ffe6e1;color:var(--danger)}button:disabled{opacity:.55}.hidden{display:none}.small{font-size:13px;color:var(--muted)}.status{margin-top:10px;font-size:14px}.error{color:var(--danger)}.ok{color:var(--ok)}.customer{border:1px solid #ececec;border-radius:16px;padding:14px;margin:10px 0}.customer h3{margin:0 0 6px}.badge{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.points{font-size:34px;font-weight:900}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tools input{grid-column:1/-1;margin:0}.tools button{margin:0}.topbar{display:flex;gap:8px;align-items:center}.topbar button{width:auto;padding:10px 14px}.spacer{flex:1}.remember{display:flex;align-items:center;gap:10px;margin:4px 0 12px;font-size:14px}.remember input{width:auto;margin:0}.face{background:#111;color:#fff;margin-top:8px}.login-note{margin-top:9px;line-height:1.35}.history{margin-top:12px;border-top:1px solid #eee;padding-top:10px}.move{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start;padding:9px 0;border-bottom:1px solid #f0f0f0}.move:last-child{border-bottom:0}.move .plus{color:var(--ok);font-weight:900}.move .minus{color:var(--danger);font-weight:900}.move time{font-size:11px;color:var(--muted);white-space:nowrap}.customer-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}@media(max-width:520px){.customer-actions,.tools{grid-template-columns:1fr}.tools input{grid-column:1}.topbar{flex-wrap:wrap}.topbar .spacer{display:none}.topbar button{width:100%}}
-</style>
-</head>
-<body><div class="wrap">
-<header><img src="../logo.png" alt="El Capricho"><h1>El Capricho Club · Admin</h1><div>Gestione clienti e punti</div></header>
-<main>
-<section id="loginCard" class="card">
-<h2>Accesso amministratore</h2>
-<p class="small">Accesso riservato a Rosticceria Italiana Tenerife.</p>
-<input id="email" type="email" value="rosticceriaitalianatenerife@gmail.com" readonly autocomplete="username">
-<input id="password" type="password" placeholder="Password" autocomplete="current-password">
-<label class="remember"><input id="remember" type="checkbox" checked> Ricorda accesso su questo dispositivo</label>
-<button id="loginBtn">Accedi</button>
-<button id="faceIdBtn" class="face" type="button">🔐 Accedi con Face ID / password salvata</button>
-<p class="small login-note">Su iPhone la password resta nel Portachiavi/iCloud Passwords: Safari può richiamarla con Face ID. Il sito non salva la password in chiaro.</p>
-<div id="loginStatus" class="status"></div>
-</section>
-
-<section id="adminArea" class="hidden">
-<div class="card topbar"><strong>Pannello cassa</strong><span class="spacer"></span><button id="logoutBtn" class="secondary">Esci</button></div>
-<div class="card">
-<h2>Cerca cliente</h2>
-<input id="search" placeholder="Nome, telefono o codice socio">
-<button id="searchBtn">Cerca</button>
-<div id="searchStatus" class="status"></div>
-</div>
-<div id="results"></div>
-</section>
-</main></div>
-<script>
-const SUPABASE_URL='https://qbddxrselxsprstvtkjn.supabase.co';
-const SUPABASE_KEY='sb_publishable_kyop1OtqIqFA1veH42AAJg_oaad6_5B';
-const $=id=>document.getElementById(id);
-const TOKEN_KEY='elcap_admin_token';
-let accessToken=localStorage.getItem(TOKEN_KEY)||sessionStorage.getItem(TOKEN_KEY)||'';
-
-async function jsonFetch(url,options={}){
-  const res=await fetch(url,options); const text=await res.text();
-  let data=null; try{data=text?JSON.parse(text):null}catch{data=text}
-  if(!res.ok) throw new Error(data?.message||data?.error_description||data?.hint||String(data||'Errore'));
-  return data;
-}
-async function rpc(name,body={}){
-  return jsonFetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${accessToken}`},body:JSON.stringify(body)});
-}
-function setLogged(logged){$('loginCard').classList.toggle('hidden',logged);$('adminArea').classList.toggle('hidden',!logged)}
-function saveAccessToken(token){
-  localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);
-  if($('remember').checked)localStorage.setItem(TOKEN_KEY,token);else sessionStorage.setItem(TOKEN_KEY,token);
-}
-async function login(){
-  const email=$('email').value.trim(),password=$('password').value;
-  if(!password){$('password').focus();return}
-  $('loginBtn').disabled=true;$('loginStatus').textContent='Accesso in corso…';$('loginStatus').className='status';
-  try{
-    const data=await jsonFetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({email,password})});
-    accessToken=data.access_token; saveAccessToken(accessToken);
-    const allowed=await rpc('club_admin_allowed');
-    if(allowed!==true){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';throw new Error('Account non autorizzato')}
-    setLogged(true);$('search').focus();await searchCustomers();
-  }catch(e){$('loginStatus').textContent='Accesso non riuscito: '+e.message;$('loginStatus').className='status error'}
-  finally{$('loginBtn').disabled=false}
-}
-function logout(){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';$('password').value='';$('results').innerHTML='';setLogged(false)}
-function faceIdLogin(){
-  $('loginStatus').textContent='Tocca il campo Password e scegli la password salvata: iPhone userà Face ID per sbloccarla.';
-  $('loginStatus').className='status';$('password').focus();
-}
-async function searchCustomers(){
-  $('searchStatus').textContent='Ricerca…';$('searchStatus').className='status';
-  try{
-    const list=await rpc('club_admin_search',{p_query:$('search').value.trim()});
-    renderCustomers(Array.isArray(list)?list:[]);
-    $('searchStatus').textContent=list?.length?`${list.length} cliente/i trovati`:'Nessun cliente trovato';
-  }catch(e){$('searchStatus').textContent='Errore: '+e.message;$('searchStatus').className='status error'}
-}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderCustomers(list){
-  $('results').innerHTML=list.map(c=>`<div class="card customer" data-id="${c.id}">
-    <h3>${esc(c.name)}</h3>
-    <div><span class="badge">${esc(c.member_code)}</span></div>
-    <div class="small" style="margin-top:6px">📞 ${esc(c.phone)}</div>
-    <div class="points">${c.points} <span style="font-size:15px">punti</span></div>
-    <div class="tools">
-      <input class="delta" type="number" min="1" step="1" placeholder="Numero punti, es. 15">
-      <input class="desc" placeholder="Descrizione, es. acquisto / premio">
-      <button onclick="adjust('${c.id}',1,this)">➕ Aggiungi</button>
-      <button class="danger" onclick="adjust('${c.id}',-1,this)">➖ Togli</button>
-    </div>
-    <div class="customer-actions"><button class="ghost" onclick="loadHistory('${c.id}',this)">🧾 Storico movimenti</button><button class="ghost" onclick="copyCode('${esc(c.member_code)}',this)">📋 Copia codice</button></div>
-    <div class="status msg"></div><div class="history hidden"></div>
-  </div>`).join('');
-}
-async function adjust(id,sign,btn){
-  const card=btn.closest('.customer'),qty=Math.abs(parseInt(card.querySelector('.delta').value||'0',10));
-  const desc=card.querySelector('.desc').value.trim(),msg=card.querySelector('.msg');
-  if(!qty){msg.textContent='Inserisci il numero di punti.';msg.className='status msg error';return}
-  const delta=qty*sign;if(sign<0&&!confirm(`Togliere ${qty} punti a questo cliente?`))return;
-  btn.disabled=true;msg.textContent='Aggiornamento…';msg.className='status msg';
-  try{const newPoints=await rpc('club_admin_adjust_points',{p_customer:id,p_delta:delta,p_description:desc||null});msg.textContent=`Fatto. Nuovo saldo: ${newPoints} punti.`;msg.className='status msg ok';await searchCustomers()}
-  catch(e){msg.textContent='Errore: '+e.message;msg.className='status msg error'}finally{btn.disabled=false}
-}
-async function loadHistory(id,btn){
-  const card=btn.closest('.customer'),box=card.querySelector('.history');
-  if(!box.classList.contains('hidden')){box.classList.add('hidden');btn.textContent='🧾 Storico movimenti';return}
-  btn.disabled=true;btn.textContent='Carico…';
-  try{
-    const list=await rpc('club_admin_history',{p_customer:id,p_limit:30});
-    box.innerHTML=(Array.isArray(list)&&list.length)?list.map(m=>{const d=new Date(m.created_at);const sign=Number(m.points)>=0?'+':'';return `<div class="move"><span class="${Number(m.points)>=0?'plus':'minus'}">${sign}${m.points}</span><div>${esc(m.description||'Movimento punti')}</div><time>${d.toLocaleDateString('it-IT')} ${d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}</time></div>`}).join(''):'<div class="small">Nessun movimento registrato.</div>';
-    box.classList.remove('hidden');btn.textContent='✖ Chiudi storico';
-  }catch(e){box.innerHTML='<div class="status error">Storico non disponibile: '+esc(e.message)+'</div>';box.classList.remove('hidden');btn.textContent='✖ Chiudi storico'}finally{btn.disabled=false}
-}
-async function copyCode(code,btn){
-  try{await navigator.clipboard.writeText(code);const old=btn.textContent;btn.textContent='✅ Copiato';setTimeout(()=>btn.textContent=old,1200)}catch{alert('Codice socio: '+code)}
-}
-$('loginBtn').addEventListener('click',login);$('faceIdBtn').addEventListener('click',faceIdLogin);$('logoutBtn').addEventListener('click',logout);$('searchBtn').addEventListener('click',searchCustomers);
-$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('search').addEventListener('keydown',e=>{if(e.key==='Enter')searchCustomers()});
-(async()=>{if(accessToken){try{const allowed=await rpc('club_admin_allowed');if(allowed===true){setLogged(true);await searchCustomers();return}}catch(e){}logout()}})();
-</script>
-</body></html>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f6c515"><title>El Capricho Club · Admin</title><style>
+:root{--y:#f6c515;--ink:#171717;--paper:#fffaf0;--muted:#6d6d6d;--danger:#b42318;--ok:#16794d}*{box-sizing:border-box}body{margin:0;background:#efede7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);padding-bottom:40px}header{background:linear-gradient(135deg,#ffd92f,var(--y));padding:26px 20px;text-align:center}header img{width:88px;height:88px;object-fit:contain;border-radius:20px;background:#fff;padding:6px}h1{margin:8px 0 0;font-size:28px}main{padding:18px}.card{background:#fff;border:1px solid #eee;border-radius:20px;padding:18px;margin-bottom:15px;box-shadow:0 6px 20px #0000000c}input,button,select{width:100%;padding:13px 14px;border-radius:13px;font-size:16px}input,select{border:1px solid #d7d7d7;margin:6px 0 10px;background:#fff}button{border:0;background:var(--y);font-weight:800;cursor:pointer;margin-top:7px}button.secondary{background:#222;color:#fff}button.ghost{background:#f3f3f3}button.danger{background:#ffe6e1;color:var(--danger)}button:disabled{opacity:.55}.hidden{display:none}.small{font-size:13px;color:var(--muted)}.status{margin-top:10px;font-size:14px}.error{color:var(--danger)}.ok{color:var(--ok)}.customer h3{margin:0 0 6px}.badge{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.points{font-size:34px;font-weight:900}.cash{background:#fff8d6;border-radius:15px;padding:13px;margin-top:12px}.cash h4{margin:0 0 5px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.topbar{display:flex;gap:8px;align-items:center}.topbar button{width:auto}.spacer{flex:1}.remember{display:flex;gap:10px;align-items:center}.remember input{width:auto}.face{background:#111;color:#fff}.history{margin-top:12px;border-top:1px solid #eee;padding-top:10px}.move{display:grid;grid-template-columns:auto 1fr auto;gap:8px;padding:9px 0;border-bottom:1px solid #eee}.plus{color:var(--ok);font-weight:900}.minus{color:var(--danger);font-weight:900}time{font-size:11px;color:var(--muted)}@media(max-width:520px){.two{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.topbar .spacer{display:none}.topbar button{width:100%}}</style></head><body><div class="wrap"><header><img src="../logo.png" alt="El Capricho"><h1>El Capricho Club · Admin</h1><div>Pannello cassa</div></header><main>
+<section id="loginCard" class="card"><h2>Accesso amministratore</h2><input id="email" type="email" value="rosticceriaitalianatenerife@gmail.com" readonly autocomplete="username"><input id="password" type="password" placeholder="Password" autocomplete="current-password"><label class="remember"><input id="remember" type="checkbox" checked> Ricorda accesso</label><button id="loginBtn">Accedi</button><button id="faceIdBtn" class="face">🔐 Face ID / password salvata</button><div id="loginStatus" class="status"></div></section>
+<section id="adminArea" class="hidden"><div class="card topbar"><strong>1 € = 1 punto · punti validi 15 giorni</strong><span class="spacer"></span><button id="logoutBtn" class="secondary">Esci</button></div><div class="card"><h2>Cerca cliente</h2><input id="search" placeholder="Nome, telefono o codice socio"><button id="searchBtn">Cerca</button><div id="searchStatus" class="status"></div></div><div id="results"></div></section>
+</main></div><script>
+const SUPABASE_URL='https://qbddxrselxsprstvtkjn.supabase.co',SUPABASE_KEY='sb_publishable_kyop1OtqIqFA1veH42AAJg_oaad6_5B',$=id=>document.getElementById(id),TOKEN_KEY='elcap_admin_token';let accessToken=localStorage.getItem(TOKEN_KEY)||sessionStorage.getItem(TOKEN_KEY)||'';
+async function jf(url,o={}){const r=await fetch(url,o),t=await r.text();let d;try{d=t?JSON.parse(t):null}catch{d=t}if(!r.ok)throw new Error(d?.message||d?.error_description||d?.hint||String(d||'Errore'));return d}async function rpc(n,b={}){return jf(`${SUPABASE_URL}/rest/v1/rpc/${n}`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${accessToken}`},body:JSON.stringify(b)})}function logged(v){$('loginCard').classList.toggle('hidden',v);$('adminArea').classList.toggle('hidden',!v)}
+async function login(){const p=$('password').value;if(!p)return $('password').focus();try{const d=await jf(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify({email:$('email').value,password:p})});accessToken=d.access_token;($('remember').checked?localStorage:sessionStorage).setItem(TOKEN_KEY,accessToken);if(await rpc('club_admin_allowed')!==true)throw new Error('Account non autorizzato');logged(true);await search()}catch(e){$('loginStatus').textContent='Accesso non riuscito: '+e.message;$('loginStatus').className='status error'}}function logout(){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);accessToken='';logged(false)}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function search(){try{const l=await rpc('club_admin_search',{p_query:$('search').value.trim()});$('searchStatus').textContent=`${l.length} cliente/i trovati`;$('results').innerHTML=l.map(c=>`<div class="card customer" data-id="${c.id}"><h3>${esc(c.name)}</h3><span class="badge">${esc(c.member_code)}</span><div class="small">📞 ${esc(c.phone)}</div><div class="points">${c.points} <small>punti</small></div><div class="cash"><h4>🛒 Registra acquisto</h4><div class="small">Inserisci il totale dello scontrino. I punti vengono calcolati automaticamente.</div><input class="amount" type="number" min="1" step="0.01" placeholder="Totale € — es. 23,50"><button onclick="purchase('${c.id}',this)">➕ Registra acquisto e punti</button></div><div class="cash"><h4>💶 Applica sconto Club</h4><div class="small">50 punti = 5 € · 100 = 10 € · 150 = 15 €…</div><select class="redeem"><option value="50">50 punti → 5 €</option><option value="100">100 punti → 10 €</option><option value="150">150 punti → 15 €</option><option value="200">200 punti → 20 €</option><option value="250">250 punti → 25 €</option><option value="300">300 punti → 30 €</option></select><button class="danger" onclick="redeem('${c.id}',this)">🎁 Usa punti e applica sconto</button></div><div class="two"><button class="ghost" onclick="history('${c.id}',this)">🧾 Storico</button><button class="ghost" onclick="navigator.clipboard.writeText('${esc(c.member_code)}')">📋 Copia codice</button></div><div class="status msg"></div><div class="history hidden"></div></div>`).join('')}catch(e){$('searchStatus').textContent='Errore: '+e.message;$('searchStatus').className='status error'}}
+async function purchase(id,b){const card=b.closest('.customer'),a=parseFloat(card.querySelector('.amount').value.replace(',','.')),m=card.querySelector('.msg');if(!a||a<=0)return m.textContent='Inserisci il totale dello scontrino.';b.disabled=true;try{const r=await rpc('club_admin_add_purchase',{p_customer:id,p_amount_eur:a}),x=r[0];m.textContent=`✅ ${x.points_added} punti aggiunti. Saldo: ${x.new_points}. Scadono tra 15 giorni.`;m.className='status msg ok';setTimeout(search,1000)}catch(e){m.textContent='Errore: '+e.message;m.className='status msg error'}finally{b.disabled=false}}
+async function redeem(id,b){const card=b.closest('.customer'),p=Number(card.querySelector('.redeem').value),m=card.querySelector('.msg');if(!confirm(`Usare ${p} punti per ${p/10} € di sconto?`))return;b.disabled=true;try{const r=await rpc('club_admin_redeem_discount',{p_customer:id,p_points:p}),x=r[0];m.textContent=`✅ Sconto da ${Number(x.discount_eur).toFixed(2)} € applicato. Restano ${x.new_points} punti.`;m.className='status msg ok';setTimeout(search,1000)}catch(e){m.textContent=e.message.includes('INSUFFICIENT')?'Punti insufficienti per questo sconto.':'Errore: '+e.message;m.className='status msg error'}finally{b.disabled=false}}
+async function history(id,b){const card=b.closest('.customer'),box=card.querySelector('.history');if(!box.classList.contains('hidden')){box.classList.add('hidden');return}try{const l=await rpc('club_admin_history',{p_customer:id,p_limit:30});box.innerHTML=l.length?l.map(x=>`<div class="move"><span class="${x.points>=0?'plus':'minus'}">${x.points>=0?'+':''}${x.points}</span><div>${esc(x.description||'Movimento')}</div><time>${new Date(x.created_at).toLocaleDateString('it-IT')}</time></div>`).join(''):'Nessun movimento';box.classList.remove('hidden')}catch(e){box.textContent='Storico non disponibile';box.classList.remove('hidden')}}
+$('loginBtn').onclick=login;$('faceIdBtn').onclick=()=>{$('password').focus();$('loginStatus').textContent='Scegli la password salvata: iPhone userà Face ID.'};$('logoutBtn').onclick=logout;$('searchBtn').onclick=search;$('search').onkeydown=e=>{if(e.key==='Enter')search()};$('password').onkeydown=e=>{if(e.key==='Enter')login()};(async()=>{if(accessToken){try{if(await rpc('club_admin_allowed')===true){logged(true);await search();return}}catch{}logout()}})();
+</script></body></html>
