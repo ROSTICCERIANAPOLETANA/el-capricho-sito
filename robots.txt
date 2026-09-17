@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /Club/admin.html
+
+Sitemap: https://elcaprichotenerife.com/sitemap.xml
